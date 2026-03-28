@@ -17,47 +17,48 @@
         <h1>Cart'Où</h1>
         <p>Bienvenue sur Cart'Où, l'appli qui essaye d'imiter Google Maps mais sans jamais l'égaler !</p>
         <nav>
-            <ul>
-                <li><a href="">Fontion 1</a></li>
-                <li><a href="">Fontion 2</a></li>
-                <li><a href="">Fontion 3</a></li>
+            <ul class="nav justify-content-center mb-3">
+                <li class="nav-item"><a class="nav-link" href="#">Fonction 1</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Fonction 2</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Fonction 3</a></li>
             </ul>
-            <button id="recherche">Recherche</button>
         </nav>
     </header>
 
     <main>
-        <div id="map"></div>
-    </main>
-
-    <aside id="aside">
-        <h3>Recherche</h3>
-
-        <div class="form-floating mb-3">
-            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                <option value="1" selected>Commence par ...</option>
-                <option value="2">.. Contient ..</option>
-                <option value="3">... Finit par</option>
-            </select>
-            <label for="floatingSelect">Option de recherche :</label>
-        </div>
-
-        <form @submit.prevent="geocode">
+        
+        <aside id="aside">
+            <h3>Recherche</h3>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Rechercher un lieu..." v-model="search" @input="autocomplete">
-                <label for="floatingInput">Lieu</label>
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option value="1" selected>Commence par ...</option>
+                    <option value="2">.. Contient ..</option>
+                    <option value="3">... Finit par</option>
+                </select>
+                <label for="floatingSelect">Option de recherche :</label>
             </div>
-            <button type="submit" class="btn btn-primary">OK</button>
-        </form>
 
-        <ul id="villes" v-if="villes.length" class="list-group mt-3">
-            <li v-for="ville in villes" @click="recupGeometry(ville)" class="list-group-item list-group-item-action" style="cursor: pointer;">
-                {{ ville.nom }} - {{ ville.insee }}
-            </li>
-        </ul>
+            <form @submit.prevent="geocode">
+        
+                <div style="position: relative;" class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Rechercher un lieu..." v-model="search" @input="autocomplete" autocomplete="off">
+                        <label for="floatingInput">Lieu</label>
+                    </div>
+                    <ul id="villes" v-if="villes.length" class="list-group" style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; max-height: 200px; overflow-y: auto; box-shadow: 0px 4px 8px rgba(0,0,0,0.2);">
+                        <li v-for="ville in villes" @click="recupGeometry(ville)" class="list-group-item list-group-item-action" style="cursor: pointer;">
+                            {{ ville.nom }} - {{ ville.insee }}
+                        </li>
+                    </ul>
+                </div>
 
-        <button type="button" class="btn btn-secondary mt-3">Autres</button>
-    </aside>
+                <button type="submit" class="btn btn-primary">OK</button>
+            </form>
+        </aside>
+
+    <div id="map"></div>
+
+    </main>
 
     <footer>
         <p>Projet Webmapping - Raphaël GONZO-MASSOL - 2026 </p>
