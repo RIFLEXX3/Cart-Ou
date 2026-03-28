@@ -1,0 +1,95 @@
+/* Thin Weight */
+@font-face {
+    font-family: "MarianneThin";
+    src: url(font/Marianne-Thin.otf);
+    font-weight: thin;
+    font-style: normal;
+}
+
+/* Thin Italic Weight */
+@font-face {
+    font-family: "MarianneThinItalic";
+    src: url(font/Marianne-ThinItalic.otf);
+    font-weight: thin;
+    font-style: italic;
+}
+
+/* Light Weight */
+@font-face {
+    font-family: "MarianneLight";
+    src: url(font/Marianne-Light.otf);
+    font-weight: light;
+    font-style: normal;
+}
+
+/* Light Italic Weight */
+@font-face {
+    font-family: "MarianneLightItalic";
+    src: url(font/Marianne-LightItalic.otf);
+    font-weight: light;
+    font-style: italic;
+}
+
+/* Regular Weight */
+@font-face {
+    font-family: "MarianneRegular";
+    src: url(font/Marianne-Regular.otf);
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Regular Italic Weight */
+@font-face {
+    font-family: "MarianneRegularItalic";
+    src: url(font/Marianne-RegularItalic.otf);
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* Medium Weight */
+@font-face {
+    font-family: "MarianneMedium";
+    src: url(font/Marianne-Medium.otf);
+    font-weight: medium;
+    font-style: normal;
+}
+
+/* Medium Italic Weight */
+@font-face {
+    font-family: "MarianneMediumItalic";
+    src: url(font/Marianne-MediumItalic.otf);
+    font-weight: medium;
+    font-style: italic;
+}
+
+/* Bold Weight */
+@font-face {
+    font-family: "MarianneBold";
+    src: url(font/Marianne-Bold.otf);
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Bold Italic Weight */
+@font-face {
+    font-family: "MarianneBoldItalic";
+    src: url(font/Marianne-BoldItalic.otf);
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Extra Bold Weight */
+@font-face {
+    font-family: "MarianneExtraBold";
+    src: url("font/Marianne-ExtraBold.otf");
+    font-weight: 800;
+    font-style: normal;
+}
+
+/* Extra Bold Italic Weight */
+@font-face {
+    font-family: "MarianneExtraBoldItalic";
+    src: url("font/Marianne-ExtraBoldItalic.otf");
+    font-weight: 800;
+    font-style: italic;
+}
