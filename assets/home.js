@@ -55,18 +55,17 @@ Vue.createApp({
         })
         .then(result => {
             this.villes = result;
-            console.log("Villes trouvées via PHP :", result);
+            console.log("Villes :", result);
             marker.clearLayers();        
             result.forEach(ville => {
                 fetch('https://data.geopf.fr/geocodage/search?q=' + ville.nom + '&limit=1')
                 .then(response => response.json())
                 .then(geojson => {
                     if (geojson.features && geojson.features.length > 0) {
+                        console.log(geojson.features[0]);
                         let feature = geojson.features[0];
-                        let lon = feature.geometry.coordinates[0];
-                        let lat = feature.geometry.coordinates[1];
-
-                        let dist = this.haversine(48.841063, 2.587373, lat, lon);
+                        
+                        let dist = this.haversine(48.841063, 2.587373, ville.lat, ville.lon);
 
                         feature.properties.label = ville.nom + " est à " + dist.toFixed(2) + " km de l'ENSG";
 
