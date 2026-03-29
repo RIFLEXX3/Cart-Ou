@@ -1,6 +1,6 @@
 var map = L.map('map').setView([45.757, 4.833], 10);
 
-const mapboxAccessToken = 'VOTRE_CLE_MAPBOX_ICI';
+const mapboxAccessToken = 'pk.eyJ1IjoicmdvbnpvIiwiYSI6ImNtbTdodmo1czBuM2cycnNnbjU3a2V6cWYifQ.qKXThwmlE9rP8wIRTuG1Tg';
 
 L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=${mapboxAccessToken}`, {
     maxZoom: 19,
@@ -8,16 +8,12 @@ L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{
 }).addTo(map);
 
 
-var marker = L.geoJSON().addTo(map);
-var popup = L.popup();
-
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("Vous avez cliqué ici : <br>" + e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4))
-        .openOn(map);
-}
-map.on('click', onMapClick);
+var marker = L.geoJSON(null, {
+    onEachFeature: function(feature, layer) {
+        let nom = feature.properties.label || feature.properties.name || 'Lieu inconnu';
+        layer.bindPopup(nom);
+    }
+}).addTo(map);
 
 navigator.geolocation.getCurrentPosition(function (position) {
     var lat = position.coords.latitude;
@@ -31,64 +27,65 @@ navigator.geolocation.getCurrentPosition(function (position) {
 });
 
 Vue.createApp({
+
   data() {
     return {
         search: '',
         villes: [],
+        option: '1', //option par défaut 1 -> Commence par...
     };
   },
   
-  computed: {
-    urlrecherche() {
-        return 'https://data.geopf.fr/geocodage/search?q=' + this.search;
-    },
-  },
-
   methods: {
-    geocode() {
-        this.villes = []; // Vider la liste
-        fetch(this.urlrecherche)
-        .then(response => response.json())
-        .then(result => {
-            marker.clearLayers(); // Nettoyer l'ancienne recherche
-            
-            // On vérifie qu'il y a bien des résultats avant de dessiner
-            if (result.features && result.features.length > 0) {
-                marker.addData(result); 
-                
-                let bounds = marker.getBounds();
-                if (bounds.isValid()) {
-                    map.fitBounds(bounds);
-                }
-            }
-        });
+    haversine(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     },
-    
-    autocomplete() {
-        let url = '/villes?recherche=' + this.search;
+
+    recherche() {
+        let url = '/villes?recherche=' + this.search + '&option=' + this.option;
         fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            return res.json();
+        })
         .then(result => {
             this.villes = result;
+            console.log("Villes trouvées via PHP :", result);
+            marker.clearLayers();        
+            result.forEach(ville => {
+                fetch('https://data.geopf.fr/geocodage/search?q=' + ville.nom + '&limit=1')
+                .then(response => response.json())
+                .then(geojson => {
+                    if (geojson.features && geojson.features.length > 0) {
+                        let feature = geojson.features[0];
+                        let lon = feature.geometry.coordinates[0];
+                        let lat = feature.geometry.coordinates[1];
+
+                        let dist = this.haversine(48.841063, 2.587373, lat, lon);
+
+                        feature.properties.label = ville.nom + " est à " + dist.toFixed(2) + " km de l'ENSG";
+
+                        marker.addData(feature);
+
+                        let bounds = marker.getBounds();
+                        if (bounds.isValid()) {
+                            map.fitBounds(bounds);
+                        }
+                    }
+                })
+            });
         });
     },
-    
-    recupGeometry(ville){ 
-        this.villes = []; 
-        this.search = ville.nom; 
-        let url = '/villes2?insee=' + ville.insee;
-        
-        fetch(url)
-        .then(res => res.json())
-        .then(result => {
-            marker.clearLayers();
-            marker.addData(result); 
-            
-            let bounds = marker.getBounds();
-            if (bounds.isValid()) {
-                map.fitBounds(bounds);
-            }
-        });
-    }
-  }
-}).mount('#aside');
+
+    rechercheFonc(ville, option) {
+        this.search = ville;
+        this.option = option;
+        this.recherche();
+    },
+
+}}).mount('#aside');
