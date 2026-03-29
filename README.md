@@ -100,14 +100,14 @@ Contrairement à la géométrie euclidienne (Pythagore), la formule de Haversine
 
 ### Les 3 étapes
 
-***1. Conversion degrés → radians**
+*** 1. Conversion degrés → radians**
 Les fonctions trigonométriques (`sin`, `cos`) travaillent en radians, pas en degrés.
 ```
 dLat = (lat2 - lat1) × π / 180
 dLon = (lon2 - lon1) × π / 180
 ```
 
-***2. Calcul de `a` (carré de la moitié de la corde)**
+*** 2. Calcul de `a` (carré de la moitié de la corde)**
 `a` est un nombre entre 0 et 1 qui représente la relation angulaire entre les deux points.
 ```
 a = sin²(dLat/2) + cos(lat1) × cos(lat2) × sin²(dLon/2)
@@ -115,12 +115,13 @@ a = sin²(dLat/2) + cos(lat1) × cos(lat2) × sin²(dLon/2)
 - `a = 0` → les deux points sont identiques
 - `a = 1` → les deux points sont aux antipodes
 
-***3. Conversion en distance réelle**
+** *3. Conversion en distance réelle**
 ```
 d = R × 2 × atan2(√a, √(1-a))
 ```
 Avec `R = 6371 km` (rayon moyen de la Terre).
 
 Ainsi, on obtient à la fin un pop-up permettant d'indiquer la commune que l'on regarde et aussi la distance entre cette dernière et l'école Géodata Paris.
+
 <img width="768" height="409" alt="image" src="https://github.com/user-attachments/assets/dbaae905-0750-4f8b-8a05-d0a25be77dc9" />
 
