@@ -1,6 +1,6 @@
 var map = L.map('map').setView([45.757, 4.833], 10);
 
-const mapboxAccessToken = 'pk.eyJ1IjoicmdvbnpvIiwiYSI6ImNtbTdodmo1czBuM2cycnNnbjU3a2V6cWYifQ.qKXThwmlE9rP8wIRTuG1Tg';
+const mapboxAccessToken = '[MAPBOX_ACCESS_TOKEN]';
 
 L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=${mapboxAccessToken}`, {
     maxZoom: 19,
